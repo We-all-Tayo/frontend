@@ -16,6 +16,8 @@ class _StartSheetState extends State<StartSheetContent> {
   double _latitude = 0.0;
   double _longitude = 0.0;
 
+  bool _reloadActive = false;
+
   @override
   void initState() {
     super.initState();
@@ -29,6 +31,7 @@ class _StartSheetState extends State<StartSheetContent> {
                     _stationInfo =
                         '${station.stationName} (${station.stationID})';
                     stationID = int.parse(station.stationID);
+                    _reloadActive = true;
                   }));
         }));
   }
@@ -45,7 +48,10 @@ class _StartSheetState extends State<StartSheetContent> {
                 IconButton(
                     icon: Icon(Icons.my_location),
                     color: Colors.blueAccent,
-                    onPressed: () {
+                    onPressed: _reloadActive ? () {
+                      setState(() {
+                        _reloadActive = false;
+                      });
                       getCurrentLocation().then((location) => setState(() {
                             _latitude = location.latitude;
                             _longitude = location.longitude;
@@ -55,9 +61,10 @@ class _StartSheetState extends State<StartSheetContent> {
                                       _stationInfo =
                                           '${station.stationName} (${station.stationID})';
                                       stationID = int.parse(station.stationID);
+                                      _reloadActive = true;
                                     }));
                           }));
-                    }),
+                    } : null),
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
