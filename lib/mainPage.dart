@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'main.dart';
@@ -45,94 +46,10 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
         title: Text('우리 모두 타요'),
         centerTitle: true,
       ),
-      body: Container(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          '거리',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                        Container(
-                          width: 10,
-                        ),
-                        Text(
-                          '|',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                        Container(
-                          width: 10,
-                        ),
-                        Text(
-                          distance,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          '각도',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                        Container(
-                          width: 10,
-                        ),
-                        Text(
-                          '|',
-                          style: TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
-                        Container(
-                          width: 10,
-                        ),
-                        Text(
-                          angle,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Center(
-                        // child: Listener(
-                        child: CameraPreview(
-                          camController,
-                        ),
-                        //),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
+      body: _body(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          isWork = false;
           _showInputSheet(context);
         },
         tooltip: '실행',
@@ -141,6 +58,91 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
+  Widget _body() => Container(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '거리',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                      Container(
+                        width: 10,
+                      ),
+                      Text(
+                        '|',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                      Container(
+                        width: 10,
+                      ),
+                      Text(
+                        distance,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '각도',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                      Container(
+                        width: 10,
+                      ),
+                      Text(
+                        '|',
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                      Container(
+                        width: 10,
+                      ),
+                      Text(
+                        angle,
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Center(
+                      child: CameraPreview(
+                        camController,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 
   _showInputSheet(BuildContext context) async {
     await showModalBottomSheet(
@@ -157,4 +159,5 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       });
     }
   }
+
 }
