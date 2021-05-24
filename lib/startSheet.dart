@@ -2,9 +2,15 @@ import 'package:flutter/material.dart';
 import 'features/callSystem.dart';
 import 'features/loadStationInfo.dart';
 
+class InputData {
+  int stationID;
+  int routeNumber;
+
+  InputData({this.stationID, this.routeNumber});
+}
+
 String _stationInfo = '정류장 (정류장ID)';
-int stationID = 0;
-int routeNumber = 0;
+InputData _input = InputData(stationID: 0, routeNumber: 0);
 
 class StartSheetContent extends StatefulWidget {
   @override
@@ -30,7 +36,7 @@ class _StartSheetState extends State<StartSheetContent> {
               .then((station) => setState(() {
                     _stationInfo =
                         '${station.stationName} (${station.stationID})';
-                    stationID = int.parse(station.stationID);
+                    _input.stationID = int.parse(station.stationID);
                     _reloadActive = true;
                   }));
         }));
@@ -60,7 +66,7 @@ class _StartSheetState extends State<StartSheetContent> {
                                 .then((station) => setState(() {
                                       _stationInfo =
                                           '${station.stationName} (${station.stationID})';
-                                      stationID = int.parse(station.stationID);
+                                      _input.stationID = int.parse(station.stationID);
                                       _reloadActive = true;
                                     }));
                           }));
@@ -95,9 +101,10 @@ class _StartSheetState extends State<StartSheetContent> {
               onPressed: () {
                 String _routeNumber = _routeNumController.value.text;
                 if (_routeNumber != '') {
-                  routeNumber = int.parse(_routeNumber);
+                  _input.routeNumber = int.parse(_routeNumber);
                   isWork = true;
-                  Navigator.pop(context);
+                  print('!!! isWork: $isWork'); // XXX
+                  Navigator.pop(context, _input);
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('시스템 시작'),
                   ));

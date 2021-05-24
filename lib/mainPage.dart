@@ -49,7 +49,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       body: _body(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          isWork = false;
+          _end();
           _showInputSheet(context);
         },
         tooltip: '실행',
@@ -145,19 +145,33 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
       );
 
   _showInputSheet(BuildContext context) async {
-    await showModalBottomSheet(
+    var result = await showModalBottomSheet(
         context: context, builder: (context) => StartSheetContent());
 
+    if (result != null) {
+      InputData input = result;
+      _start(input.stationID, input.routeNumber);
+    }
+  }
+
+  _start(int stationID, int routeNumber) {
+    // FIXME Make it loop
     if (isWork) {
       callSystem(stationID, routeNumber).then((value) {
         if (value != null) {
           setState(() {
             distance = value.distance.toString();
             angle = value.angle.toString();
+            print('distance: $distance, angle: $angle'); // XXX
           });
         }
       });
     }
   }
 
+  _end() {
+    // FIXME Stop Loop
+    isWork = false;
+    print('!!! isWork: $isWork'); // XXX
+  }
 }
