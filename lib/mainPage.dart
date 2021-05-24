@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'main.dart';
@@ -15,6 +15,9 @@ String distance = '';
 String angle = '';
 
 class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  Timer _timer;
+
   @override
   void initState() {
     super.initState();
@@ -35,8 +38,6 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     camController?.dispose();
     super.dispose();
   }
-
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -155,23 +156,26 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   }
 
   _start(int stationID, int routeNumber) {
-    // FIXME Make it loop
-    if (isWork) {
-      callSystem(stationID, routeNumber).then((value) {
-        if (value != null) {
-          setState(() {
-            distance = value.distance.toString();
-            angle = value.angle.toString();
-            print('distance: $distance, angle: $angle'); // XXX
-          });
-        }
-      });
-    }
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (isWork) {
+        callSystem(stationID, routeNumber).then((value) {
+          if (value != null) {
+            setState(() {
+              distance = value.distance.toString();
+              angle = value.angle.toString();
+              print('distance: $distance, angle: $angle'); // XXX
+            });
+          }
+        });
+      }
+    });
   }
 
   _end() {
-    // FIXME Stop Loop
-    isWork = false;
-    print('!!! isWork: $isWork'); // XXX
+    if (isWork) {
+      isWork = false;
+      print('!!! isWork: $isWork'); // XXX
+      _timer?.cancel();
+    }
   }
 }

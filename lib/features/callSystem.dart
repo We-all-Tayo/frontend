@@ -12,8 +12,9 @@ bool isWork = false;
 
 Future<ResultData> callSystem(int stationID, int routeNum) async {
   XFile imageFile = await takePicture();
-  print('$stationID, $routeNum, ${imageFile.path}'); // XXX
-
+  if (imageFile != null) {
+    print('$stationID, $routeNum, ${imageFile.path}'); // XXX
+  }
   // FIXME: Start the system
 
   return ResultData(distance: 0, angle: 0);
