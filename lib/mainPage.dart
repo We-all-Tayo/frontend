@@ -159,7 +159,7 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (isWork) {
         callSystem(stationID, routeNumber).then((value) {
-          if (value != null) {
+          if (value != null && (value.distance != null && value.angle != null)) {
             setState(() {
               distance = value.distance.toString();
               angle = value.angle.toString();

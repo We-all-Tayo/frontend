@@ -32,7 +32,7 @@ class _StartSheetState extends State<StartSheetContent> {
           _latitude = location.latitude;
           _longitude = location.longitude;
 
-          loadStationInfo(_longitude, _latitude, 100)
+          loadStationInfo(_longitude, _latitude, 200)
               .then((station) => setState(() {
                     _stationInfo =
                         '${station.stationName} (${station.stationID})';
