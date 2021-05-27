@@ -17,18 +17,15 @@ String angle = '';
 class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Timer _timer;
+  Future _initializeControllerFuture;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance?.addObserver(this);
 
-    camController = CameraController(cameras[0], ResolutionPreset.max);
-    camController.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-    });
+    camController = CameraController(cameras.first, ResolutionPreset.medium);
+    _initializeControllerFuture = camController.initialize();
   }
 
   @override
@@ -128,18 +125,27 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                   ),
                 ),
               ),
-              Expanded(
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Center(
-                      child: CameraPreview(
-                        camController,
+              FutureBuilder<void>(
+                future: _initializeControllerFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Center(
+                          child: CameraPreview(
+                            camController,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
               ),
+              // Expanded(
+              // ),
             ],
           ),
         ),
@@ -159,11 +165,11 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (isWork) {
         callSystem(stationID, routeNumber).then((value) {
-          if (value != null && (value.distance != null && value.angle != null)) {
+          if (value != null &&
+              (value.distance != null && value.angle != null)) {
             setState(() {
               distance = value.distance.toString();
               angle = value.angle.toString();
-              print('distance: $distance, angle: $angle'); // XXX
             });
           }
         });
