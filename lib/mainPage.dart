@@ -61,70 +61,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
         child: Center(
           child: Column(
             children: <Widget>[
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        '거리',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                      Container(
-                        width: 10,
-                      ),
-                      Text(
-                        '|',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                      Container(
-                        width: 10,
-                      ),
-                      Text(
-                        distance,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(10),
-                child: Container(
-                  padding: EdgeInsets.all(10),
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        '각도',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                      Container(
-                        width: 10,
-                      ),
-                      Text(
-                        '|',
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
-                      Container(
-                        width: 10,
-                      ),
-                      Text(
-                        angle,
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  ),
-                ),
-              ),
+              _outputWidget('거리', distance),
+              _outputWidget('각도', angle),
               FutureBuilder<void>(
                 future: _initializeControllerFuture,
                 builder: (context, snapshot) {
@@ -150,6 +88,41 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
           ),
         ),
       );
+
+  Widget _outputWidget(String text, String value) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Container(
+        padding: EdgeInsets.all(10),
+        child: Row(
+          children: <Widget>[
+            Text(
+              text,
+              style: TextStyle(fontSize: 18, color: Colors.grey),
+            ),
+            Container(
+              width: 10,
+            ),
+            Text(
+              '|',
+              style: TextStyle(fontSize: 18, color: Colors.grey),
+            ),
+            Container(
+              width: 10,
+            ),
+            Text(
+              value,
+              style: TextStyle(fontSize: 18),
+            ),
+          ],
+        ),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+          borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        ),
+      ),
+    );
+  }
 
   _showInputSheet(BuildContext context) async {
     var result = await showModalBottomSheet(
