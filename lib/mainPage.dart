@@ -67,16 +67,15 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                 future: _initializeControllerFuture,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
-                    return Container(
+                    return Expanded(
+                        child: Container(
                       child: Padding(
                         padding: const EdgeInsets.all(10),
-                        child: Center(
                           child: CameraPreview(
                             camController,
-                          ),
                         ),
                       ),
-                    );
+                    ));
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
