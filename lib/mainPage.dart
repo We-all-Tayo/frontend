@@ -71,8 +71,8 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
                         child: Container(
                       child: Padding(
                         padding: const EdgeInsets.all(10),
-                          child: CameraPreview(
-                            camController,
+                        child: CameraPreview(
+                          camController,
                         ),
                       ),
                     ));
@@ -139,9 +139,22 @@ class _MainPageState extends State<MainPage> with WidgetsBindingObserver {
         callSystem(stationID, routeNumber).then((value) {
           if (value != null &&
               (value.distance != null && value.angle != null)) {
+            if (value.angle < 0) {
+              value.angle *= -1;
+              setState((){
+                angle = '왼쪽 ${value.angle}';
+              });
+            } else if (value.angle > 0) {
+              setState((){
+                angle = '오른쪽 ${value.angle}';
+              });
+            } else {
+              setState(() {
+                angle = '직진';
+              });
+            }
             setState(() {
               distance = value.distance.toString();
-              angle = value.angle.toString();
             });
           }
         });
